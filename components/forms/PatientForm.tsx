@@ -3,9 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import CustomFormField from "./CustomFormField";
+import SubmitButton from "../SubmitButton";
+import { useState } from "react";
+import { UserFormValidation } from "@/lib/validation";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -17,27 +19,27 @@ export enum FormFieldType {
   SKELETON = "skeleton",
 }
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message:
-      "Username must be at least 2 characters.",
-  }),
-});
+
 
 const PatientForm = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isLoading, setIsLoading] =
+    useState(false);
+
   const form = useForm<
-    z.infer<typeof formSchema>
+    z.infer<typeof UserFormValidation>
   >({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(UserFormValidation),
     defaultValues: {
-      username: "",
+      name: "",
+      email: "",
+      phone: "",
     },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function onSubmit(
-    values: z.infer<typeof formSchema>
+    values: z.infer<typeof UserFormValidation>
   ) {
     console.log(values);
   }
@@ -64,14 +66,26 @@ const PatientForm = () => {
         />
 
         <CustomFormField
-        fieldType={FormFieldType.PHONE_INPUT}
-        control={form.control}
-        name="phone"
-        label="Telefone"
-        placeholder="Digite seu telefone"
+          fieldType={FormFieldType.INPUT}
+          control={form.control}
+          name="email"
+          label="E-mail"
+          placeholder="Digite seu email"
+          iconSrc="/assets/icons/email.svg"
+          iconAlt="email"
         />
 
-        <Button type="submit">Submit</Button>
+        <CustomFormField
+          fieldType={FormFieldType.PHONE_INPUT}
+          control={form.control}
+          name="phone"
+          label="Telefone"
+          placeholder="Digite seu telefone"
+        />
+
+        <SubmitButton isLoading={isLoading}>
+          Enviar
+        </SubmitButton>
       </form>
     </Form>
   );
