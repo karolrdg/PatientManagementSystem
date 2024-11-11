@@ -1,31 +1,25 @@
-'use server'
+'use server';
 import { Query, ID } from "node-appwrite";
-import { parseStringify } from "../utils"
+//import { parseStringify } from "../utils"
 import { users } from "../appwrite.config"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createUser = async (user: CreateUserParams) => {
-try {
-    const newUser = await users.create((ID.unique()),
-        user.name,
+    try {
+      const newUser = await users.create(
+        ID.unique(),
         user.email,
+        user.phone,
         undefined,
-        user.phone
-    )
-    console.log({newUser})
-
-    return parseStringify(newUser)
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-catch (error:any) {
-    if (error && error?.code === 409) {
-        const existingUser = await users.list([
-          Query.equal("email", [user.email]),
-        ]);
+        user.name
+      );
   
-        return existingUser.users[0];
+      return newUser;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error && error?.code === 409) {
+        const documents = await users.list([Query.equal("email", [user.email])]);
+        return documents?.users[0];
       }
-      console.error("An error occurred while creating a new user:", error);
-     
     }
   };
