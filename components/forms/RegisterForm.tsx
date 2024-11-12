@@ -4,7 +4,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+} from "@/components/ui/form";
 import CustomFormField, {
   FormFieldType,
 } from "./CustomFormField";
@@ -13,6 +16,7 @@ import { useState } from "react";
 import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
+import { RadioGroup } from "../ui/radio-group";
 
 const RegisterForm = ({
   user,
@@ -92,25 +96,54 @@ const RegisterForm = ({
         />
 
         <div className="flex flex-1 gap-6 xl:flex-row">
-        <CustomFormField
-          fieldType={FormFieldType.PHONE_INPUT}
-          control={form.control}
-          name="phone"
-          label="Telefone"
-          placeholder="Digite seu telefone"
-        />
-
-        <CustomFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          name="email"
-          label="E-mail"
-          placeholder="Digite seu email"
-          iconSrc="/assets/icons/email.svg"
-          iconAlt="email"
-        />
-
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="email"
+            label="E-mail"
+            placeholder="Digite seu email"
+            iconSrc="/assets/icons/email.svg"
+            iconAlt="email"
+          />
+          <CustomFormField
+            fieldType={FormFieldType.PHONE_INPUT}
+            control={form.control}
+            name="phone"
+            label="Telefone"
+            placeholder="Digite seu telefone"
+          />
         </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.DATE_PICKER}
+            control={form.control}
+            name="birthDate"
+            label="Data de nascimento"
+            placeholder="Digite seu email"
+          />
+          <CustomFormField
+            fieldType={FormFieldType.SKELETON}
+            control={form.control}
+            name="gender"
+            label="Gênero"
+            renderSkeleton={(field) => (
+              <FormControl>
+                <RadioGroup
+                  className="flex h-11 gap-6 xl:justify-between"
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                ></RadioGroup>
+              </FormControl>
+            )}
+          />
+        </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row"></div>
+
+        <div className="flex flex-col gap-6 xl:flex-row"></div>
+
+        <div className="flex flex-col gap-6 xl:flex-row"></div>
 
         <SubmitButton isLoading={isLoading}>
           Enviar
