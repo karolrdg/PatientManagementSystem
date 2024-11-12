@@ -5,6 +5,9 @@ import Image from "next/image";
 import { Control } from "react-hook-form";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 //import { Checkbox } from "./ui/checkbox";
 import {
@@ -42,12 +45,21 @@ interface CustomProps {
   showTimeSelect?: boolean;
   children?: React.ReactNode;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  renderSkeleton?: (field: any) => React.ReactNode;
- 
+  renderSkeleton?: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    field: any
+  ) => React.ReactNode;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
+const RenderInput = ({
+  field,
+  props,
+}: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  field: any;
+  props: CustomProps;
+}) => {
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
@@ -78,14 +90,38 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
             placeholder={props.placeholder}
             international
             withCountryCallingCode
-            value={field.value as E164Number | undefined}
+            value={
+              field.value as
+                | E164Number
+                | undefined
+            }
             onChange={field.onChange}
             className="input-phone"
           />
         </FormControl>
       );
+    case FormFieldType.DATE_PICKER:
+      return (
+        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+          <Image
+            src="/assets/icons/calendar.svg"
+            height={24}
+            width={24}
+            alt="user"
+            className="ml-2"
+          />
+          <FormControl>
+            <DatePicker
+              selected={field.value}
+              onChange={(date) =>
+                field.onChange(date)
+              }
+            />
+          </FormControl>
+        </div>
+      );
     default:
-        return null;
+      break;
   }
 };
 
@@ -98,10 +134,17 @@ const CustomFormField = (props: CustomProps) => {
       name={name}
       render={({ field }) => (
         <FormItem className="flex-1">
-          {props.fieldType !== FormFieldType.CHECKBOX && label && (
-            <FormLabel className="shad-input-label">{label}</FormLabel>
-          )}
-          <RenderInput field={field} props={props} />
+          {props.fieldType !==
+            FormFieldType.CHECKBOX &&
+            label && (
+              <FormLabel className="shad-input-label">
+                {label}
+              </FormLabel>
+            )}
+          <RenderInput
+            field={field}
+            props={props}
+          />
 
           <FormMessage className="shad-error" />
         </FormItem>
