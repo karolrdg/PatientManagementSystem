@@ -138,6 +138,10 @@ const RenderInput = ({
           </FormControl>
         </div>
       );
+    case FormFieldType.SKELETON:
+      return renderSkeleton
+        ? renderSkeleton(field)
+        : null;
     default:
       break;
   }
