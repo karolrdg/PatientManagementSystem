@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
@@ -60,6 +61,15 @@ const RenderInput = ({
   field: any;
   props: CustomProps;
 }) => {
+  const {
+    fieldType,
+    iconSrc,
+    iconAlt,
+    placeholder,
+    showTimeSelect,
+    dateFormat,
+    renderSkeleton,
+  } = props;
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
@@ -116,6 +126,14 @@ const RenderInput = ({
               onChange={(date) =>
                 field.onChange(date)
               }
+              dateFormat={
+                dateFormat ?? "dd/MM/yyyy"
+              }
+              showTimeSelect={
+                showTimeSelect ?? false
+              }
+              timeInputLabel="Time"
+              wrapperClassName="date-picker"
             />
           </FormControl>
         </div>
