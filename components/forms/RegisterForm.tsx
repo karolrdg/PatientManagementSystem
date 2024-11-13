@@ -16,8 +16,11 @@ import { useState } from "react";
 import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { GenderOptions } from "@/constants";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "../ui/radio-group";
+import { Doctors, GenderOptions } from "@/constants";
 import { Label } from "../ui/label";
 
 const RegisterForm = ({
@@ -161,18 +164,71 @@ const RegisterForm = ({
           />
         </div>
 
-        {/*<section className="space-y-6">
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="address"
+            label="Endereço"
+            placeholder="Digite seu endereço"
+          />
+
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="occupation"
+            label="Profissão"
+            placeholder="Digite sua profissão"
+          />
+        </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="emergencyContactName"
+            label="Contato Emergência"
+            placeholder="Digite o nome"
+          />
+          <CustomFormField
+            fieldType={FormFieldType.PHONE_INPUT}
+            control={form.control}
+            name="emergencyContactNumber"
+            label="Digite o número"
+            placeholder=""
+          />
+        </div>
+
+        <section className="space-y-6">
           <div className="mb-9 space-y-1">
             <h2 className="sub-header">
-            Dados Médicos
+              Dados Médicos
             </h2>
           </div>
-        </section>*/}
+        </section>
 
-        <div className="flex flex-col gap-6 xl:flex-row"></div>
-
-        <div className="flex flex-col gap-6 xl:flex-row"></div>
-
+        <CustomFormField
+          fieldType={FormFieldType.SELECT}
+          control={form.control}
+          name="primaryPhysician"
+          label="Médico/Médica"
+          placeholder="Selecione o médico/médica"
+        >
+          {Doctors.map(doctor) => (
+            <SelectItem key={doctor.name + i} value={doctor.name}>
+            <div className="flex cursor-pointer items-center gap-2">
+              <Image
+                src={doctor.image}
+                width={32}
+                height={32}
+                alt="doctor"
+                className="rounded-full border border-dark-500"
+              />
+              <p>{doctor.name}</p>
+            </div>
+          </SelectItem>
+          ))}
+        </CustomFormField>
         <div className="flex flex-col gap-6 xl:flex-row"></div>
 
         <SubmitButton isLoading={isLoading}>
