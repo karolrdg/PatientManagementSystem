@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "../ui/select";
 //import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 //import { Textarea } from "./ui/textarea";
 
@@ -137,6 +138,26 @@ const RenderInput = ({
             />
           </FormControl>
         </div>
+      );
+    case FormFieldType.SELECT:
+      return (
+        <FormControl>
+          <Select
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+          >
+            <FormControl>
+              <SelectTrigger className="shad-select-trigger">
+                <SelectValue
+                  placeholder={props.placeholder}
+                />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent className="shad-select-content">
+              {props.children}
+            </SelectContent>
+          </Select>
+        </FormControl>
       );
     case FormFieldType.SKELETON:
       return renderSkeleton
