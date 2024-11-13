@@ -20,8 +20,15 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "../ui/radio-group";
-import { Doctors, GenderOptions } from "@/constants";
+import {
+  Doctors,
+  GenderOptions,
+  IdentificationTypes,
+  PatientFormDefaultValues,
+} from "@/constants";
 import { Label } from "../ui/label";
+import Image from "next/image";
+import { SelectItem } from "../ui/select";
 
 const RegisterForm = ({
   user,
@@ -214,22 +221,60 @@ const RegisterForm = ({
           label="Médico/Médica"
           placeholder="Selecione o médico/médica"
         >
-          {Doctors.map(doctor) => (
-            <SelectItem key={doctor.name + i} value={doctor.name}>
-            <div className="flex cursor-pointer items-center gap-2">
-              <Image
-                src={doctor.image}
-                width={32}
-                height={32}
-                alt="doctor"
-                className="rounded-full border border-dark-500"
-              />
-              <p>{doctor.name}</p>
-            </div>
-          </SelectItem>
+          {Doctors.map((doctor) => (
+            <SelectItem
+              key={doctor.name}
+              value={doctor.name}
+            >
+              <div className="flex cursor-pointer items-center gap-2">
+                <Image
+                  src={doctor.image}
+                  width={32}
+                  height={32}
+                  alt="doctor"
+                  className="rounded-full border border-dark-500"
+                />
+                <p>{doctor.name}</p>
+              </div>
+            </SelectItem>
           ))}
         </CustomFormField>
-        <div className="flex flex-col gap-6 xl:flex-row"></div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="insuranceProvider"
+            label="Seguro Saúde"
+            placeholder=""
+          />
+
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="insurancePolicyNumber"
+            label="Código"
+            placeholder="Digite seu código"
+          />
+        </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="allergies"
+            label="Alergias"
+            placeholder="Se alguma, digite aqui"
+          />
+
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="currentMedication"
+            label="Medicação Atual"
+            placeholder="Se alguma, digite aqui"
+          />
+        </div>
 
         <SubmitButton isLoading={isLoading}>
           Enviar
@@ -238,5 +283,7 @@ const RegisterForm = ({
     </Form>
   );
 };
+
+//test
 
 export default RegisterForm;
