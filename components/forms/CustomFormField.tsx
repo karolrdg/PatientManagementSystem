@@ -20,8 +20,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "../ui/select";
+import { Textarea } from "../ui/textarea";
 //import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
-//import { Textarea } from "./ui/textarea";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -93,6 +93,16 @@ const RenderInput = ({
           </FormControl>
         </div>
       );
+      case FormFieldType.TEXTAREA:
+        return
+        <FormControl>
+          <Textarea
+          placeholder={placeholder}
+          {...field}
+          className="shad-textArea"
+          disabled={props.disabled}
+          />
+        </FormControl>
     case FormFieldType.PHONE_INPUT:
       return (
         <FormControl>
