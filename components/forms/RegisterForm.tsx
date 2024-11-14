@@ -276,6 +276,32 @@ const RegisterForm = ({
           />
         </div>
 
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="familyMedicalHistory"
+            label="Histotico Familiar"
+            placeholder="Se algum, digite aqui"
+          />
+
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="pastMedicalHistory"
+            label="Histórico Medicação"
+            placeholder="Se algum, digite aqui"
+          />
+        </div>
+
+        <section className="space-y-6">
+          <div className="mb-9 space-y-1">
+            <h2 className="sub-header">
+              Identificação/Verificação
+            </h2>
+          </div>
+        </section>
+
         <SubmitButton isLoading={isLoading}>
           Enviar
         </SubmitButton>
