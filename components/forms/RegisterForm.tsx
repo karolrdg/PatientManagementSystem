@@ -29,6 +29,7 @@ import {
 import { Label } from "../ui/label";
 import Image from "next/image";
 import { SelectItem } from "../ui/select";
+import FileUploader from "../FileUploader";
 
 const RegisterForm = ({
   user,
@@ -281,7 +282,7 @@ const RegisterForm = ({
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
             name="familyMedicalHistory"
-            label="Histotico Familiar"
+            label="Histórico Familiar (Doenças)"
             placeholder="Se algum, digite aqui"
           />
 
@@ -289,7 +290,7 @@ const RegisterForm = ({
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
             name="pastMedicalHistory"
-            label="Histórico Medicação"
+            label="Histórico Paciente (Doenças)"
             placeholder="Se algum, digite aqui"
           />
         </div>
@@ -301,6 +302,41 @@ const RegisterForm = ({
             </h2>
           </div>
         </section>
+
+        <CustomFormField
+          fieldType={FormFieldType.SELECT}
+          control={form.control}
+          name="identificationType"
+          label="Tipo de Identificação"
+          placeholder="Selecione o tipo de identificação"
+        >
+          {IdentificationTypes.map((type) => (
+            <SelectItem key={type} value={type}>
+              {type}
+            </SelectItem>
+          ))}
+        </CustomFormField>
+
+        <CustomFormField
+          fieldType={FormFieldType.INPUT}
+          control={form.control}
+          name="identificationNumber"
+          label="Número de Identificação"
+          placeholder="Digite seu número de identificação"
+        />
+
+        <CustomFormField
+          fieldType={FormFieldType.SKELETON}
+          control={form.control}
+          name="identificationDocument"
+          label="Cópia do Documento de Identificação"
+          renderSkeleton={(field) => (
+            <FormControl>
+              <FileUploader />
+              
+                </FormControl>
+          )}
+        />
 
         <SubmitButton isLoading={isLoading}>
           Enviar
