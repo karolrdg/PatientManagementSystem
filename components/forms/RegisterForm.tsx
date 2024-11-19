@@ -332,11 +332,30 @@ const RegisterForm = ({
           label="Cópia do Documento de Identificação"
           renderSkeleton={(field) => (
             <FormControl>
-              <FileUploader />
-              
-                </FormControl>
+              <FileUploader
+                files={field.value}
+                onChange={field.onChange}
+              />
+            </FormControl>
           )}
         />
+
+        <section className="space-y-6">
+          <div className="mb-9 space-y-1">
+            <h2 className="sub-header">
+              Termos e Privacidade
+            </h2>
+          </div>
+        </section>
+
+        <CustomFormField
+          fieldType={FormFieldType.CHECKBOX}
+          control={form.control}
+          name="treatmentConsent"
+          label="Aceito os termos e condições"
+        />
+
+        
 
         <SubmitButton isLoading={isLoading}>
           Enviar
