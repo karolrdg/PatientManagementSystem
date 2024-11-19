@@ -352,10 +352,22 @@ const RegisterForm = ({
           fieldType={FormFieldType.CHECKBOX}
           control={form.control}
           name="treatmentConsent"
-          label="Aceito os termos e condições"
+          label="Aceito o tratamento"
         />
 
-        
+        <CustomFormField
+          fieldType={FormFieldType.CHECKBOX}
+          control={form.control}
+          name="disclosureConsent"
+          label="Aceito a divulgação de informações"
+        />
+
+        <CustomFormField
+          fieldType={FormFieldType.CHECKBOX}
+          control={form.control}
+          name="privacyConsent"
+          label="Aceito a política de privacidade"
+        />
 
         <SubmitButton isLoading={isLoading}>
           Enviar
