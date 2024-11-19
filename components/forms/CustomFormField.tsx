@@ -177,7 +177,15 @@ const RenderInput = ({
       return renderSkeleton
         ? renderSkeleton(field)
         : null;
-    default:
+        case FormFieldType.CHECKBOX:
+          return (
+            <FormControl>
+              <div className="flex items-center">
+
+              </div>
+            </FormControl>
+          )
+            default:
       break;
   }
 };
