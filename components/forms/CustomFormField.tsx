@@ -19,8 +19,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Textarea } from "../ui/textarea";
+import { Checkbox } from "../ui/checkbox";
 
 //import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 
@@ -95,17 +101,17 @@ const RenderInput = ({
         </div>
       );
 
-      case FormFieldType.TEXTAREA:
-        return (
-          <FormControl>
-            <Textarea
-              placeholder={placeholder}
-              {...field}
-              className="shad-textArea"
-              disabled={props.disabled}
-            />
-          </FormControl>
-        );
+    case FormFieldType.TEXTAREA:
+      return (
+        <FormControl>
+          <Textarea
+            placeholder={placeholder}
+            {...field}
+            className="shad-textArea"
+            disabled={props.disabled}
+          />
+        </FormControl>
+      );
 
     case FormFieldType.PHONE_INPUT:
       return (
@@ -177,15 +183,25 @@ const RenderInput = ({
       return renderSkeleton
         ? renderSkeleton(field)
         : null;
-        case FormFieldType.CHECKBOX:
-          return (
-            <FormControl>
-              <div className="flex items-center">
-
-              </div>
-            </FormControl>
-          )
-            default:
+    case FormFieldType.CHECKBOX:
+      return (
+        <FormControl>
+          <div className="flex items-center gap-4">
+            <Checkbox
+              id={props.name}
+              checked={field.value}
+              onChange={field.onChange}
+            />
+            <label
+              htmlFor={props.name}
+              className="checkbox-label"
+            >
+              {props.label}
+            </label>
+          </div>
+        </FormControl>
+      );
+    default:
       break;
   }
 };
