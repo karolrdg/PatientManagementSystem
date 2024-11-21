@@ -4,8 +4,8 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="flex h-screen max-h-screen">
-      <section className="remove-scroll-bar container my-auto">
-        <div className="sub-container max-w-[496px]">
+      <section className="remove-scrollbar container">
+        <div className="sub-container max-w-[740px] flex-1 flex-col py-10">
           <Image
             src="assets/icons/logo-full.svg"
             height={1000}
@@ -35,6 +35,7 @@ export default function Home() {
         alt="doctor"
         className="side-img max-w-[50%]"
       />
+
     </div>
   );
 }
