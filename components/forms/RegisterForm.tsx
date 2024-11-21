@@ -370,6 +370,7 @@ const RegisterForm = ({
         />
 
         <SubmitButton isLoading={isLoading}>
+          
           Enviar
         </SubmitButton>
       </form>
