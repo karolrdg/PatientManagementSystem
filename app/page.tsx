@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container">
-        <div className="sub-container max-w-[740px] flex-1 flex-col py-10">
+        <div className="sub-container max-w-[620px] flex-1 flex-col py-10">
           <Image
             src="assets/icons/logo-full.svg"
             height={1000}
