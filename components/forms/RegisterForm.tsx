@@ -13,7 +13,7 @@ import CustomFormField, {
 } from "./CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { useState } from "react";
-import { UserFormValidation } from "@/lib/validation";
+import { PatientFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
 import {
@@ -42,10 +42,11 @@ const RegisterForm = ({
     useState(false);
 
   const form = useForm<
-    z.infer<typeof UserFormValidation>
+    z.infer<typeof PatientFormValidation>
   >({
-    resolver: zodResolver(UserFormValidation),
+    resolver: zodResolver(PatientFormValidation),
     defaultValues: {
+      ...PatientFormDefaultValues,
       name: "",
       email: "",
       phone: "",
@@ -53,26 +54,28 @@ const RegisterForm = ({
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function onSubmit({
-    name,
-    email,
-    phone,
-  }: z.infer<typeof UserFormValidation>) {
+  async function onSubmit(
+  values: z.infer<typeof PatientFormValidation>) {
     setIsLoading(true);
+
+    let formData;
+
+    if (
+      values.identificationDocument &&
+      values.identificationDocument?.length > 0
+    ) {
+      const blobFile = new Blob([values.identificationDocument[0]], {
+        type: values.identificationDocument[0].type,
+      });
+
+      formData = new FormData();
+      formData.append("blobFile", blobFile);
+      formData.append("fileName", values.identificationDocument[0].name);
+    }
+
     try {
-      const userData = {
-        name,
-        email,
-        phone,
-      };
-
-      const user = await createUser(userData);
-
-      if (user) {
-        router.push(
-          `/patients/${user.$id}/register`
-        );
-      }
+      
+      
     } catch (error) {
       console.error(error);
     }
