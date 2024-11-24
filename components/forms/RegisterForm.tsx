@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
@@ -15,7 +16,7 @@ import SubmitButton from "../SubmitButton";
 import { useState } from "react";
 import { PatientFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
-import { createUser } from "@/lib/actions/patient.actions";
+import { createUser, registerPatient } from "@/lib/actions/patient.actions";
 import {
   RadioGroup,
   RadioGroupItem,
@@ -74,7 +75,16 @@ const RegisterForm = ({
     }
 
     try {
-      
+      const patientData = {
+        ...values,
+        userId: user.$id,
+        birthDate: new Date(values.birthDate),
+        identificationDocument: formData,
+      };
+// @ts-ignore
+      const patient = await registerPatient(patientData);
+
+      if (patient) router.push(`/patient/${user.$id}/new-appointment`);
       
     } catch (error) {
       console.error(error);
