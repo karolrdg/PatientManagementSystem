@@ -26,7 +26,10 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
+
 import { Checkbox } from "../ui/checkbox";
+
+
 
 //import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 
@@ -179,10 +182,12 @@ const RenderInput = ({
           </Select>
         </FormControl>
       );
+
     case FormFieldType.SKELETON:
       return renderSkeleton
         ? renderSkeleton(field)
         : null;
+
     case FormFieldType.CHECKBOX:
       return (
         <FormControl>
@@ -190,7 +195,7 @@ const RenderInput = ({
             <Checkbox
               id={props.name}
               checked={field.value}
-              onChange={field.onChange}
+              onCheckedChange={field.onChange}
             />
             <label
               htmlFor={props.name}
@@ -202,7 +207,7 @@ const RenderInput = ({
         </FormControl>
       );
     default:
-      break;
+      return null;
   }
 };
 
