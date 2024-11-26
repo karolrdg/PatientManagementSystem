@@ -1,11 +1,17 @@
 import RegisterForm from "@/components/forms/RegisterForm";
-import { getUser } from "@/lib/actions/patient.actions";
+import { getPatient, getUser } from "@/lib/actions/patient.actions";
 import Image from "next/image";
 import React from "react";
+import { redirect } from "next/navigation";
 
 
-const Register = async ({ params: { userId } }: SearchParamProps) => {
-    const user = await getUser(userId);
+const Register = async ({params : { userId }  }: SearchParamProps) => {
+  const user = await getUser(userId)
+
+  const patient = await getPatient(userId);
+  if (patient) {
+    redirect(`/patients/${userId}/new-appointment`);
+  }
 
 
   return (
@@ -39,6 +45,7 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
   </div>
   );
 };
+
 
 
 export default Register;
