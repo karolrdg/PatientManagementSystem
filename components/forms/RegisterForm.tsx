@@ -16,7 +16,10 @@ import SubmitButton from "../SubmitButton";
 import { useState } from "react";
 import { PatientFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
-import { createUser, registerPatient } from "@/lib/actions/patient.actions";
+import {
+  createUser,
+  registerPatient,
+} from "@/lib/actions/patient.actions";
 import {
   RadioGroup,
   RadioGroupItem,
@@ -48,15 +51,16 @@ const RegisterForm = ({
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
       ...PatientFormDefaultValues,
-      name: "",
-      email: "",
-      phone: "",
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
     },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function onSubmit(
-  values: z.infer<typeof PatientFormValidation>) {
+    values: z.infer<typeof PatientFormValidation>
+  ) {
     setIsLoading(true);
 
     let formData;
@@ -65,30 +69,67 @@ const RegisterForm = ({
       values.identificationDocument &&
       values.identificationDocument?.length > 0
     ) {
-      const blobFile = new Blob([values.identificationDocument[0]], {
-        type: values.identificationDocument[0].type,
-      });
+      const blobFile = new Blob(
+        [values.identificationDocument[0]],
+        {
+          type: values.identificationDocument[0]
+            .type,
+        }
+      );
 
       formData = new FormData();
       formData.append("blobFile", blobFile);
-      formData.append("fileName", values.identificationDocument[0].name);
+      formData.append(
+        "fileName",
+        values.identificationDocument[0].name
+      );
     }
 
     try {
-      const patientData = {
-        ...values,
+      const patient = {
         userId: user.$id,
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
         birthDate: new Date(values.birthDate),
-        identificationDocument: formData,
+        gender: values.gender,
+        address: values.address,
+        occupation: values.occupation,
+        emergencyContactName:
+          values.emergencyContactName,
+        emergencyContactNumber:
+          values.emergencyContactNumber,
+        primaryPhysician: values.primaryPhysician,
+        allergies: values.allergies,
+        currentMedication:
+          values.currentMedication,
+        familyMedicalHistory:
+          values.familyMedicalHistory,
+        pastMedicalHistory:
+          values.pastMedicalHistory,
+        identificationType:
+          values.identificationType,
+        identificationNumber:
+          values.identificationNumber,
+        identificationDocument:
+          values.identificationDocument
+            ? formData
+            : undefined,
+        privacyConsent: values.privacyConsent,
       };
-// @ts-ignore
-      const patient = await registerPatient(patientData);
+        // @ts-expect-error 
+      const newPatient = await registerPatient(patient);
 
-      if (patient) router.push(`/patient/${user.$id}/new-appointment`);
-      
+      if (newPatient) {
+        router.push(
+          `/patients/${user.$id}/new-appointment`
+        );
+      }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
+
+    setIsLoading(false);
   }
 
   return (
@@ -383,7 +424,6 @@ const RegisterForm = ({
         />
 
         <SubmitButton isLoading={isLoading}>
-          
           Enviar
         </SubmitButton>
       </form>
