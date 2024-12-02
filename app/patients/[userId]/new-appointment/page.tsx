@@ -23,7 +23,7 @@ export default async function NewAppointment({
           <AppointmentForm
           type="create"
           userId={userId}
-          patientId={patient.$id}
+          patientId={patient?.$id}
           />
 
           <p className="justify-items-end text-dark-600 xl:text-left">
