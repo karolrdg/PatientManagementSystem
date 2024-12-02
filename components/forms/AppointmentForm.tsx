@@ -13,10 +13,19 @@ import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
 import App from "next/app";
 import { FormFieldType } from "./PatientForm";
+import Image from "next/image";
+import { SelectItem } from "../ui/select";
+import { Doctors } from "@/constants";
 
-
-const AppointmentForm = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const AppointmentForm = ({
+  userId,
+  patientId,
+  type = "create",
+}: {
+  userId: string;
+  patientId: string;
+  type: "create" | "schedule" | "cancel";
+}) => {
   const router = useRouter();
   const [isLoading, setIsLoading] =
     useState(false);
@@ -40,16 +49,18 @@ const AppointmentForm = () => {
   }: z.infer<typeof UserFormValidation>) {
     setIsLoading(true);
     try {
-     const userData = {
+      const userData = {
         name,
         email,
         phone,
       };
 
-      const user = await createUser (userData);
+      const user = await createUser(userData);
 
       if (user) {
-        router.push(`/patients/${user.$id}/register`);
+        router.push(
+          `/patients/${user.$id}/register`
+        );
       }
     } catch (error) {
       console.error(error);
@@ -68,33 +79,71 @@ const AppointmentForm = () => {
             Agende sua consulta
           </p>
         </section>
-        <CustomFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          name="name"
-          label="Nome Completo"
-          placeholder="Digite seu nome"
-          iconSrc="/assets/icons/user.svg"
-          iconAlt="user"
-        />
 
-        <CustomFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          name="email"
-          label="E-mail"
-          placeholder="Digite seu email"
-          iconSrc="/assets/icons/email.svg"
-          iconAlt="email"
-        />
+        {type !== "cancel" && (
+          <>
+            <CustomFormField
+              fieldType={FormFieldType.SELECT}
+              control={form.control}
+              name="primaryPhysician"
+              label="Médico/Médica"
+              placeholder="Selecione o médico/médica"
+            >
+              {Doctors.map((doctor) => (
+                <SelectItem
+                  key={doctor.name}
+                  value={doctor.name}
+                >
+                  <div className="flex cursor-pointer items-center gap-2">
+                    <Image
+                      src={doctor.image}
+                      width={32}
+                      height={32}
+                      alt="doctor"
+                      className="rounded-full border border-dark-500"
+                    />
+                    <p>{doctor.name}</p>
+                  </div>
+                </SelectItem>
+              ))}
+            </CustomFormField>
+            <CustomFormField
+              fieldType={
+                FormFieldType.DATE_PICKER
+              }
+              control={form.control}
+              name="schedule"
+              label="Data e hora"
+              showTimeSelect
+              dateFormat="dd/MM/yyyy  -  h:mm aa"
+            />
 
-        <CustomFormField
-          fieldType={FormFieldType.PHONE_INPUT}
-          control={form.control}
-          name="phone"
-          label="Telefone"
-          placeholder="Digite seu telefone"
-        />
+            <div
+              className={`flex flex-col gap-6  ${
+                type === "create" && "xl:flex-row"
+              }`}
+            >
+              <CustomFormField
+                fieldType={FormFieldType.TEXTAREA}
+                control={form.control}
+                name="reason"
+                label="Motivo consulta"
+                placeholder=""
+                disabled={type === "schedule"}
+              />
+
+              <CustomFormField
+                fieldType={FormFieldType.TEXTAREA}
+                control={form.control}
+                name="note"
+                label="Observações"
+                placeholder=""
+                disabled={type === "schedule"}
+              />
+            </div>
+          </>
+        )}
+
 
         <SubmitButton isLoading={isLoading}>
           Enviar
