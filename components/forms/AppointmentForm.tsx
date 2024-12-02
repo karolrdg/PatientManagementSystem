@@ -65,6 +65,23 @@ export const AppointmentForm = ({
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
+  }
+
+  let buttonLabel;
+
+  switch (type) {
+    case "cancel":
+      buttonLabel = "Cancelar";
+      break;
+    case "create":
+      buttonLabel = "Schedule Appointment";
+      break;
+    case "schedule":
+      buttonLabel = "Schedule Apppointment";
+      break;
+    default:
+      break;
   }
 
   return (
@@ -144,8 +161,23 @@ export const AppointmentForm = ({
           </>
         )}
 
-
-        <SubmitButton isLoading={isLoading}>
+        {type === "cancel" && (
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="cancellationReason"
+            label="Motivo do cancelamento"
+            placeholder=""
+          />
+        )}
+        <SubmitButton
+          isLoading={isLoading}
+          className={`${
+            type === "cancel"
+              ? "shad-danger-btn"
+              : "shad-primary-btn"
+          } w-full`}
+        >
           Enviar
         </SubmitButton>
       </form>
