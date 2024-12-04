@@ -8,7 +8,7 @@ import { Form } from "@/components/ui/form";
 import CustomFormField from "./CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { useState } from "react";
-import { UserFormValidation } from "@/lib/validation";
+import { AppointmentFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
 import App from "next/app";
@@ -31,23 +31,39 @@ export const AppointmentForm = ({
     useState(false);
 
   const form = useForm<
-    z.infer<typeof UserFormValidation>
+    z.infer<typeof AppointmentFormValidation>
   >({
-    resolver: zodResolver(UserFormValidation),
+    resolver: zodResolver(
+      AppointmentFormValidation
+    ),
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
+      primaryPhysician: "",
+      schedule: new Date(),
+      reason: "",
+      note: "",
+      cancellationReason: "",
     },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function onSubmit({
-    name,
-    email,
-    phone,
-  }: z.infer<typeof UserFormValidation>) {
+  async function onSubmit(
+    values: z.infer<
+      typeof AppointmentFormValidation
+    >
+  ) {
     setIsLoading(true);
+
+    let status;
+    switch (type) {
+      case "schedule":
+        status = "scheduled";
+        break;
+      case "cancel":
+        status = "cancelled";
+        break;
+      default:
+        status = "pending";
+    }
     try {
       const userData = {
         name,
@@ -75,7 +91,7 @@ export const AppointmentForm = ({
       buttonLabel = "Cancelar";
       break;
     case "create":
-      buttonLabel = "Schedule Appointment";
+      buttonLabel = "Agendar";
       break;
     case "schedule":
       buttonLabel = "Schedule Apppointment";
@@ -92,7 +108,7 @@ export const AppointmentForm = ({
       >
         <section className="mb-12 space-y-4">
           <h1 className="header">Bem vindo</h1>
-          <p className="text-dark-700">
+          <p className="mb-10 py-6">
             Agende sua consulta
           </p>
         </section>
@@ -178,7 +194,7 @@ export const AppointmentForm = ({
               : "shad-primary-btn"
           } w-full`}
         >
-          Enviar
+          {buttonLabel}
         </SubmitButton>
       </form>
     </Form>
