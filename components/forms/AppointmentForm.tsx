@@ -10,13 +10,12 @@ import SubmitButton from "../SubmitButton";
 import { useState } from "react";
 import { getAppointmentSchema } from "@/lib/validation";
 import { useRouter } from "next/navigation";
-import { createUser } from "@/lib/actions/patient.actions";
-import App from "next/app";
 import { FormFieldType } from "./PatientForm";
 import Image from "next/image";
 import { SelectItem } from "../ui/select";
 import { Doctors } from "@/constants";
 import { createAppointment } from "@/lib/actions/appointment.actions";
+import { Appointment } from "@/types/appwrite.types";
 
 export const AppointmentForm = ({
   userId,
@@ -71,7 +70,7 @@ export const AppointmentForm = ({
 
     try {
       if (type === "create" && patientId) {
-        const appointmentData = {
+        const appointment = {
           userId,
           patient: patientId,
           primaryPhysician:
@@ -81,15 +80,13 @@ export const AppointmentForm = ({
           status: status as Status,
           note: values.note,
         };
-        const appointment =
-          await createAppointment(
-            appointmentData
-          );
+        const newAppointment =
+          await createAppointment(appointment);
 
-        if (appointment) {
+        if (newAppointment) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
           );
         }
       }
@@ -100,16 +97,14 @@ export const AppointmentForm = ({
   }
 
   let buttonLabel;
-
   switch (type) {
     case "cancel":
-      buttonLabel = "Cancelar";
+      buttonLabel = "Cancel Appointment";
       break;
     case "create":
-      buttonLabel = "Agendar";
-      break;
+      buttonLabel = "Create Appointment";
     case "schedule":
-      buttonLabel = "Schedule Apppointment";
+      buttonLabel = "Schedule Appointment";
       break;
     default:
       break;
@@ -121,12 +116,14 @@ export const AppointmentForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 flex-1"
       >
-        <section className="mb-12 space-y-4">
-          <h1 className="header">Bem vindo</h1>
-          <p className="mb-10 py-6">
-            Agende sua consulta
-          </p>
-        </section>
+        {type === "create" && (
+          <section className="mb-12 space-y-4">
+            <h1 className="header">Bem vindo</h1>
+            <p className="mb-10 py-6">
+              Agende sua consulta
+            </p>
+          </section>
+        )}
 
         {type !== "cancel" && (
           <>
