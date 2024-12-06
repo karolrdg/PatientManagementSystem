@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getPatient } from "@/lib/actions/patient.actions";
 
 
+
 export default async function NewAppointment({
   params: { userId }}: SearchParamProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
