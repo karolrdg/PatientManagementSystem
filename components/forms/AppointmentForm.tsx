@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +15,6 @@ import Image from "next/image";
 import { SelectItem } from "../ui/select";
 import { Doctors } from "@/constants";
 import { createAppointment } from "@/lib/actions/appointment.actions";
-import { Appointment } from "@/types/appwrite.types";
 
 export const AppointmentForm = ({
   userId,
@@ -24,7 +23,7 @@ export const AppointmentForm = ({
 }: {
   userId: string;
   patientId: string;
-  type: "create" | "schedule" | "cancel";
+  type: "create" | "cancel" | "schedule";
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] =
@@ -66,11 +65,11 @@ export const AppointmentForm = ({
         break;
       default:
         status = "pending";
+        break;
     }
-
     try {
       if (type === "create" && patientId) {
-        const appointment = {
+        const appointmentData = {
           userId,
           patient: patientId,
           primaryPhysician:
@@ -80,16 +79,20 @@ export const AppointmentForm = ({
           status: status as Status,
           note: values.note,
         };
-        const newAppointment =
-          await createAppointment(appointment);
 
-        if (newAppointment) {
+        const appointment =
+          await createAppointment(
+            appointmentData
+          );
+
+        if (appointment) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.id}`
           );
         }
       }
+      
     } catch (error) {
       console.error(error);
     }
@@ -97,6 +100,7 @@ export const AppointmentForm = ({
   }
 
   let buttonLabel;
+
   switch (type) {
     case "cancel":
       buttonLabel = "Cancel Appointment";
@@ -152,6 +156,7 @@ export const AppointmentForm = ({
                 </SelectItem>
               ))}
             </CustomFormField>
+
             <CustomFormField
               fieldType={
                 FormFieldType.DATE_PICKER
@@ -174,7 +179,6 @@ export const AppointmentForm = ({
                 name="reason"
                 label="Motivo consulta"
                 placeholder=""
-                disabled={type === "schedule"}
               />
 
               <CustomFormField
@@ -183,7 +187,6 @@ export const AppointmentForm = ({
                 name="note"
                 label="Observações"
                 placeholder=""
-                disabled={type === "schedule"}
               />
             </div>
           </>
