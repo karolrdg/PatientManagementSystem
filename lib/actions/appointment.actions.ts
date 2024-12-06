@@ -1,4 +1,4 @@
-"use server";
+"use server"
 
 import { ID } from "node-appwrite";
 import { APPOINTMENT_COLLECTION_ID, DATABASE_ID, databases } from "../appwrite.config";
