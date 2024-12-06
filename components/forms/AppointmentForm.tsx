@@ -15,15 +15,25 @@ import Image from "next/image";
 import { SelectItem } from "../ui/select";
 import { Doctors } from "@/constants";
 import { createAppointment } from "@/lib/actions/appointment.actions";
+import "react-datepicker/dist/react-datepicker.css";
+import { Appointment } from "@/types/appwrite.types";
+
+
+
+
 
 export const AppointmentForm = ({
   userId,
   patientId,
   type = "create",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  appointment,
 }: {
   userId: string;
   patientId: string;
   type: "create" | "cancel" | "schedule";
+  appointment?: Appointment;
+
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] =
@@ -65,7 +75,6 @@ export const AppointmentForm = ({
         break;
       default:
         status = "pending";
-        break;
     }
     try {
       if (type === "create" && patientId) {
@@ -88,7 +97,7 @@ export const AppointmentForm = ({
         if (appointment) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
           );
         }
       }
@@ -107,12 +116,14 @@ export const AppointmentForm = ({
       break;
     case "create":
       buttonLabel = "Create Appointment";
+      break;
     case "schedule":
       buttonLabel = "Schedule Appointment";
       break;
     default:
       break;
   }
+  
 
   return (
     <Form {...form}>
@@ -201,13 +212,9 @@ export const AppointmentForm = ({
             placeholder=""
           />
         )}
-        <SubmitButton
+       <SubmitButton
           isLoading={isLoading}
-          className={`${
-            type === "cancel"
-              ? "shad-danger-btn"
-              : "shad-primary-btn"
-          } w-full`}
+          className={`${type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"} w-full`}
         >
           {buttonLabel}
         </SubmitButton>

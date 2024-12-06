@@ -2,10 +2,9 @@ import AppointmentForm from "@/components/forms/AppointmentForm";
 import Image from "next/image";
 import { getPatient } from "@/lib/actions/patient.actions";
 
-
-
 export default async function NewAppointment({
-  params: { userId }}: SearchParamProps) {
+  params: { userId },
+}: SearchParamProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const patient = await getPatient(userId);
 
@@ -22,13 +21,13 @@ export default async function NewAppointment({
           />
 
           <AppointmentForm
-          type="create"
-          userId={userId}
-          patientId={patient?.$id}
+            type="create"
+            userId={userId}
+            patientId={patient?.$id}
           />
 
-          <p className="copyright mt-10 py-12">
-            © 2024 CarePulse
+          <p className="copyright mt-10 py-12 text-center">
+            © {new Date().getFullYear()} CarePulse
           </p>
         </div>
       </section>
