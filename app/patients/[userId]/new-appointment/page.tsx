@@ -1,12 +1,26 @@
+'use client'
 import AppointmentForm from "@/components/forms/AppointmentForm";
 import Image from "next/image";
 import { getPatient } from "@/lib/actions/patient.actions";
 
+interface SearchParamProps {
+  params: {
+    userId: string;
+  };
+}
+
+// eslint-disable-next-line @next/next/no-async-client-component
 export default async function NewAppointment({
   params: { userId },
 }: SearchParamProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const patient = await getPatient(userId);
+  let patient = null;
+
+  try {
+    patient = await getPatient(userId);
+    console.log("Paciente encontrado:", patient);
+  } catch (error) {
+    console.error("Erro ao buscar o paciente:", error);
+  }
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -23,7 +37,7 @@ export default async function NewAppointment({
           <AppointmentForm
             type="create"
             userId={userId}
-            patientId={patient?.$id}
+            patientId={patient?.$id || ""}
           />
 
           <p className="copyright mt-10 py-12 text-center">
@@ -38,6 +52,7 @@ export default async function NewAppointment({
         width={1000}
         alt="appointment"
         className="side-img max-w-[390px] bg-bottom"
+        onError={(e) => console.error("Erro ao carregar a imagem:", e)}
       />
     </div>
   );
